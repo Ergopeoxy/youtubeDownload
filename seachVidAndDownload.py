@@ -1,6 +1,6 @@
-# importing packages
-from pytube import YouTube, Playlist
+from pytube import YouTube, Playlist,Search
 import os
+
 
 
 def downloadMp3(yt, askPath=0):
@@ -24,24 +24,24 @@ def downloadMp3(yt, askPath=0):
     print(yt.title + " has been successfully downloaded.")
 
 
-# url input from user
-def single():
-    yt = YouTube(str(input("Enter the URL of the video you want to download: \n>> ")))
-    downloadMp3(yt,1)
-   
-playlistFlag = str(input("playlist or single vid? 1=playlist 0-single (defualt 0) \n>> ")) or '0'
 
+searchQuery = str(input("Search query ?"))
+s = Search(searchQuery)
+for index, vid in enumerate(s.results):
+    print(f"{index}, Title: {vid.title}")
+      
+print('get result 0')
+print(s.results[0].title)
 
-
-
-
-def playlist():
-    p = Playlist(str(input("Enter the URL of the video you want to download: \n>> ")))
-    for video in p.videos:
-       downloadMp3(video)
-
-if playlistFlag=='0':
-    single()
+downloadFlag = str(input("do you want to download? type index of song or type -1 to download all and n for abort: "))
+if(downloadFlag=='-1'):
+    for vid in s.results:
+        print(vid)
+        downloadMp3(vid)
+elif(downloadFlag=='n'):
+    exit()
 else:
-    playlist()
+    downloadMp3(s.results[int(downloadFlag)])
+
+
 
